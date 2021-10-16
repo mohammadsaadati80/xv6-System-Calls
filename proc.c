@@ -188,7 +188,6 @@ fork(void)
   if((np = allocproc()) == 0){
     return -1;
   }
-  printf(1, "FLAG");
   // Copy process state from proc.
   if((np->pgdir = copyuvm(curproc->pgdir, curproc->sz)) == 0){
     kfree(np->kstack);
@@ -203,7 +202,6 @@ fork(void)
   // Clear %eax so that fork returns 0 in the child.
   np->tf->eax = 0;
 
-  printf(1, "FLAG2");
   for(i = 0; i < NOFILE; i++)
     if(curproc->ofile[i])
       np->ofile[i] = filedup(curproc->ofile[i]);
@@ -215,7 +213,6 @@ fork(void)
 
   acquire(&ptable.lock);
 
-  printf(1, "FLAG3");
   np->state = RUNNABLE;
 
   release(&ptable.lock);
