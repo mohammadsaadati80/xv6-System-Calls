@@ -31,6 +31,7 @@ main(void)
       printf(1, "init: exec sh failed\n");
       exit();
     }
+    printf(1, "Group #6:\n1. Mohammad Araghi\n2. Emad Emami\n3. Mohammad Saadati\n");
     while((wpid=wait()) >= 0 && wpid != pid)
       printf(1, "zombie!\n");
   }
