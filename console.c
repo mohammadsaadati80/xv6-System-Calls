@@ -213,6 +213,39 @@ struct {
 #define C(x)  ((x)-'@')  // Control-x
 
 void
+shiftrinput() {
+  int index, next_char, pos;
+  pos = getcr();
+  changecr(pos + 1);
+  index = input.e;
+  next_char = input.buf[index % INPUT_BUF];
+  while(index < input.end) {
+    int tmp = next_char;
+    next_char = input.buf[(index + 1) % INPUT_BUF];
+    input.buf[(index + 1) % INPUT_BUF] = tmp;
+    consputc(input.buf[(index + 1) % INPUT_BUF]);
+    index++;
+  }
+  input.end++;
+  changecr(pos);
+}
+
+void
+shiftlinput() {
+  int index, pos;
+  pos = getcr();
+  index = input.e - 1;
+  while(index < input.end) {
+    input.buf[index % INPUT_BUF] = input.buf[(index + 1) % INPUT_BUF];
+    consputc(input.buf[index % INPUT_BUF]);
+    index++;
+  }
+  consputc(' ');
+  input.end--;
+  changecr(pos);
+}
+
+void
 consoleintr(int (*getc)(void))
 {
   int c, doprocdump = 0;
@@ -274,8 +307,9 @@ consoleintr(int (*getc)(void))
       break;
     case C('H'): case '\x7f':  // Backspace
       if(input.e != input.w){
-        input.e--;
         consputc(BACKSPACE);
+        shiftlinput();
+        input.e--;
       }
       break;
     default:
@@ -283,11 +317,9 @@ consoleintr(int (*getc)(void))
         c = (c == '\r') ? '\n' : c;
         if(c == '\n' || c == C('D'))
           input.buf[input.end++ % INPUT_BUF] = c;
-        else
+        else {
+          shiftrinput();
           input.buf[input.e++ % INPUT_BUF] = c;
-
-        while (input.end < input.e) {
-          input.end++;
         }
 
         consputc(c);
