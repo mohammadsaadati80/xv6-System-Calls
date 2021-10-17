@@ -128,16 +128,41 @@ panic(char *s)
 #define CRTPORT 0x3d4
 static ushort *crt = (ushort*)P2V(0xb8000);  // CGA memory
 
+// Upper character
+int upper(int c) {
+  if('a' <= c && c <= 'z')
+    c += 'A' - 'a';
+  return c;
+}
+
+// cursor
+int
+getcr() {
+  int pos;
+
+  outb(CRTPORT, 14);
+  pos = inb(CRTPORT+1) << 8;
+  outb(CRTPORT, 15);
+  pos |= inb(CRTPORT+1);
+
+  return pos;
+}
+
+static void 
+changecr(int pos) {
+  outb(CRTPORT, 14);
+  outb(CRTPORT+1, pos>>8);
+  outb(CRTPORT, 15);
+  outb(CRTPORT+1, pos);
+}
+
 static void
 cgaputc(int c)
 {
   int pos;
 
   // Cursor position: col + 80*row.
-  outb(CRTPORT, 14);
-  pos = inb(CRTPORT+1) << 8;
-  outb(CRTPORT, 15);
-  pos |= inb(CRTPORT+1);
+  pos = getcr();
 
   if(c == '\n')
     pos += 80 - pos%80;
@@ -155,11 +180,9 @@ cgaputc(int c)
     memset(crt+pos, 0, sizeof(crt[0])*(24*80 - pos));
   }
 
-  outb(CRTPORT, 14);
-  outb(CRTPORT+1, pos>>8);
-  outb(CRTPORT, 15);
-  outb(CRTPORT+1, pos);
-  crt[pos] = ' ' | 0x0700;
+  changecr(pos);
+  if(c == BACKSPACE)
+    crt[pos] = ' ' | 0x0700;
 }
 
 void
@@ -184,6 +207,7 @@ struct {
   uint r;  // Read index
   uint w;  // Write index
   uint e;  // Edit index
+  uint end; // input end
 } input;
 
 #define C(x)  ((x)-'@')  // Control-x
@@ -200,6 +224,47 @@ consoleintr(int (*getc)(void))
       // procdump() locks cons.lock indirectly; invoke later
       doprocdump = 1;
       break;
+    case C('T'): {
+      char tmp;
+      tmp = input.buf[(input.e - 1) % INPUT_BUF];
+      input.buf[(input.e - 1) % INPUT_BUF] = input.buf[(input.e - 2) % INPUT_BUF];
+      input.buf[(input.e - 2) % INPUT_BUF] = tmp;
+
+      consputc(BACKSPACE);
+      consputc(BACKSPACE);
+      consputc(input.buf[(input.e - 2) % INPUT_BUF]);
+      consputc(input.buf[(input.e - 1) % INPUT_BUF]);
+      break;
+    }
+    case C('A'): {
+      int pos;
+      pos = getcr();
+      int change;
+      change = pos%80 - 2;
+      input.e -= change;
+      changecr(pos - change);
+      break;
+    }
+    case C('O'): {
+      int pos;
+      pos = getcr();
+      while (input.e < input.end){
+        changecr(++pos);
+        if(input.buf[(input.e) % INPUT_BUF] == ' ') {
+          while(input.buf[(input.e + 1) % INPUT_BUF] == ' ') {
+            changecr(++pos);
+            input.e++;
+          }
+          input.e++;
+          break;
+        }
+        consputc(BACKSPACE);
+        input.buf[(input.e) % INPUT_BUF] = upper(input.buf[(input.e) % INPUT_BUF]);
+        consputc(input.buf[(input.e) % INPUT_BUF]);
+        input.e++;
+      }
+      break;
+    }
     case C('U'):  // Kill line.
       while(input.e != input.w &&
             input.buf[(input.e-1) % INPUT_BUF] != '\n'){
@@ -216,9 +281,19 @@ consoleintr(int (*getc)(void))
     default:
       if(c != 0 && input.e-input.r < INPUT_BUF){
         c = (c == '\r') ? '\n' : c;
-        input.buf[input.e++ % INPUT_BUF] = c;
+        if(c == '\n' || c == C('D'))
+          input.buf[input.end++ % INPUT_BUF] = c;
+        else
+          input.buf[input.e++ % INPUT_BUF] = c;
+
+        while (input.end < input.e) {
+          input.end++;
+        }
+
         consputc(c);
+
         if(c == '\n' || c == C('D') || input.e == input.r+INPUT_BUF){
+          input.e = input.end;
           input.w = input.e;
           wakeup(&input.r);
         }
