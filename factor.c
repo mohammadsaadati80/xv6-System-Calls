@@ -9,7 +9,7 @@ main(int argc, char *argv[])
 {
 
 
-  char ans[4000];
+  char ans[16];
   int n = atoi(argv[1]);
   int j = 0;
   for (int i = 1; i <= n; i++)
