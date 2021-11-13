@@ -89,3 +89,10 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+int 
+sys_calculate_sum_of_digits(void) {
+  int number = myproc()->tf->ebx;
+  cprintf("KERNEL = SYS calculate sum of digits. Call for number %d\n", number);
+  return calculate_sum_of_digits(number);
+}

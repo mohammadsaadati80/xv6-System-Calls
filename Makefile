@@ -182,6 +182,7 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_factor\
+	_sum_of_digits\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
