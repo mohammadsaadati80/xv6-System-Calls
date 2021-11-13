@@ -3,5 +3,6 @@
 #include "user.h"
 
 int main(int argc, char *argv[]){
+	printf("SALAM\n");
 	printf("Parent pid: %d\n", get_parent_pid());
 } 

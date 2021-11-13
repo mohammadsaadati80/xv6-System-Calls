@@ -549,6 +549,6 @@ calculate_sum_of_digits(int number)
 
 
 int get_parent_pid() {
-  
+  return 0;
 }
 // int set_process_parent(int) 
