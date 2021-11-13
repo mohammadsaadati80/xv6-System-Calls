@@ -24,6 +24,10 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int calculate_sum_of_digits(void);
+// int get_file_sectors(void);
+int get_parent_pid(void);
+// int set_process_parent(void);
+
 
 // ulib.c
 int stat(const char*, struct stat*);

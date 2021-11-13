@@ -542,3 +542,13 @@ calculate_sum_of_digits(int number)
   }
   return result;
 }
+
+ 
+// void get_file_sector(int fd) {
+
+
+
+int get_parent_pid() {
+  return myproc()->parent->pid;
+}
+// int set_process_parent(int) 

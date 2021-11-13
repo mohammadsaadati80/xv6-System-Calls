@@ -96,3 +96,13 @@ sys_calculate_sum_of_digits(void) {
   cprintf("KERNEL = SYS calculate sum of digits. Call for number %d\n", number);
   return calculate_sum_of_digits(number);
 }
+
+
+// void sys_get_file_sector(void) {
+
+int
+sys_get_parent_pid(void) {
+  return get_parent_pid();
+}
+
+// int sys_set_process_parent(void) 
