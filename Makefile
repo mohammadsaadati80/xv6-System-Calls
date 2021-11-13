@@ -183,6 +183,7 @@ UPROGS=\
 	_zombie\
 	_factor\
 	_parent_pid\
+	_sum_of_digits\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)

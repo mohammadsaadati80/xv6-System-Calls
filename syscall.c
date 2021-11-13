@@ -131,9 +131,12 @@ static int (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_calculate_sum_of_digits] sys_calculate_sum_of_digits,
+<<<<<<< HEAD
 // [SYS_get_file_sectors] sys_get_file_sectors,
 [SYS_get_parent_pid] sys_get_parent_pid,
 // [SYS_set_process_parent] sys_set_process_parent,
+=======
+>>>>>>> 2fcc411e07e21a61605c435982f5938e388dc613
 };
 
 void
