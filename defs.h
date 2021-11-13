@@ -120,6 +120,10 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+int             calculate_sum_of_digits(int);
+// void            get_file_sector(int);
+int             get_parent_pid();
+// int             set_process_parent(int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

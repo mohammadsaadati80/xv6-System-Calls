@@ -531,3 +531,24 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+int
+calculate_sum_of_digits(int number)
+{
+  int result = 0;
+  while(number) {
+    result += number % 10;
+    number /= 10;
+  }
+  return result;
+}
+
+ 
+// void get_file_sector(int fd) {
+
+
+
+int get_parent_pid() {
+  
+}
+// int set_process_parent(int) 
