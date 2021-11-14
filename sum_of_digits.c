@@ -1,10 +1,11 @@
-#include "types.h"
 #include "stat.h"
 #include "user.h"
+#include "types.h"
 
 int main(int argc, char *argv[]){
-	if(argc < 2){
-		printf(2, "You must enter exactly 1 number!\n");
+	if(argc < 2)
+	{
+		printf(2, "You must enter exactly one number!\n");
 		exit();
 	}
     else
@@ -17,7 +18,7 @@ int main(int argc, char *argv[]){
 			: "r"(number)
 		);
 		printf(1, "User: calculate_sum_of_digits() called for number: %d\n" , number);
-		printf(1, "Sum Of Digits %d is: %d\n" , number , calculate_sum_of_digits());
+		printf(1, "Sum Of Digits %d = %d\n" , number , calculate_sum_of_digits());
 		asm("movl %0, %%ebx" : : "r"(saved_ebx)); 
 		exit();  	
     }
