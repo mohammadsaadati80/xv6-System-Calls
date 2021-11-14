@@ -184,6 +184,8 @@ UPROGS=\
 	_factor\
 	_parent_pid\
 	_sum_of_digits\
+	_debugger\
+	_program\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
