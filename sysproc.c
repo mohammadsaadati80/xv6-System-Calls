@@ -105,4 +105,9 @@ sys_get_parent_pid(void) {
   return get_parent_pid();
 }
 
-// int sys_set_process_parent(void) 
+void 
+sys_set_process_parent(void) {
+  int pid = myproc()->tf->ebx;
+  cprintf("KERNEL = SYS set process parent. Call for pid %d\n", pid);
+  return set_process_parent(pid);
+} 

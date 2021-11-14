@@ -546,9 +546,32 @@ calculate_sum_of_digits(int number)
  
 // void get_file_sector(int fd) {
 
-
-
-int get_parent_pid() {
-  return myproc()->parent->pid;
+int 
+get_parent_pid() {
+  struct proc *p = myproc()->parent;
+  cprintf("Process %d real parent is: %d\n", myproc()->pid, p->pid);
+  while (p->isvirt) {
+    p = p->real_parent;
+  }
+  return p->pid;
 }
-// int set_process_parent(int) 
+
+struct proc*
+get_proc(int pid) {
+  struct proc* p;
+  for(p = ptable.proc; p < &ptable.proc[6]; p++) {
+    if(p->pid == pid)
+      return p;
+  }
+  panic("There is no process with this pid.");
+}
+
+void 
+set_process_parent(int pid) {
+  struct proc* p = get_proc(pid);
+  struct proc* myp = myproc();
+  myp->isvirt = 1;
+  myp->real_parent = p->parent;
+  p->parent = myproc();
+  cprintf("proc %d parent changed to %d\n", p->pid, myp->pid);
+}
