@@ -449,10 +449,10 @@ sys_get_file_sectors(void) {
   struct file *f;
   uint* addrs_starts;
 
-  cprintf("KERNEL = SYS get file sectors. Call for fd %d\n", fd);
   if(argfd(0, &fd, &f) < 0 || argptr(1, (void*)&addrs_starts, sizeof(*addrs_starts)) < 0)
     return -1;
 
+  cprintf("KERNEL = SYS get file sectors. Call for fd %d\n", fd);
   for(int i = 0; i < NDIRECT+1; i++) 
     addrs_starts[i] = (int)f->ip->addrs[i];
   return 5;

@@ -18,11 +18,11 @@ void make_file(char* path, int size) {
 }
 
 void print_sectors(char* path) {
-    printf(2, "%s: ", path);
     uint storing_addresses[13];
     int fd = open(path, O_RDONLY);
     get_file_sectors(fd, storing_addresses);
 
+    printf(2, "%s: ", path);
     for(int i = 0; i < 13; i++)
         printf(2, " %d,", storing_addresses[i]);
     printf(1, "\n");
