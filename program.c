@@ -6,8 +6,6 @@ int main(int argc, char *argv[]){
     printf(1, "My pid: %d\n", getpid());
     printf(1, "Parent pid: %d\n", get_parent_pid());
     sleep(2000);
-    // printf(2, "FUCK\n");
-    // set_process_parent(2);
     printf(1, "My pid: %d\n", getpid());
     printf(1, "Parent pid: %d\n", get_parent_pid());
     printf(2, "program exited\n");

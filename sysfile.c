@@ -442,3 +442,17 @@ sys_pipe(void)
   fd[1] = fd1;
   return 0;
 }
+
+int 
+sys_get_file_sectors(void) {
+  int fd;
+  struct file *f;
+  uint* addrs_starts;
+
+  if(argfd(0, &fd, &f) < 0 || argptr(1, (void*)&addrs_starts, sizeof(*addrs_starts)) < 0)
+    return -1;
+
+  for(int i = 0; i < NDIRECT+1; i++) 
+    addrs_starts[i] = (int)f->ip->addrs[i];
+  return 5;
+}

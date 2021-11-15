@@ -121,7 +121,7 @@ int             wait(void);
 void            wakeup(void*);
 void            yield(void);
 int             calculate_sum_of_digits(int);
-// void            get_file_sector(int);
+void            get_file_sector(int);
 int             get_parent_pid();
 void            set_process_parent(int);
 
