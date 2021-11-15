@@ -543,9 +543,6 @@ calculate_sum_of_digits(int number)
   return result;
 }
 
- 
-// void get_file_sector(int fd) {
-
 int 
 get_parent_pid() {
   struct proc *p = myproc()->parent;
@@ -559,7 +556,7 @@ get_parent_pid() {
 struct proc*
 get_proc(int pid) {
   struct proc* p;
-  for(p = ptable.proc; p < &ptable.proc[6]; p++) {
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
     if(p->pid == pid)
       return p;
   }

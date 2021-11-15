@@ -97,9 +97,6 @@ sys_calculate_sum_of_digits(void) {
   return calculate_sum_of_digits(number);
 }
 
-
-// void sys_get_file_sector(void) {
-
 int
 sys_get_parent_pid(void) {
   return get_parent_pid();
